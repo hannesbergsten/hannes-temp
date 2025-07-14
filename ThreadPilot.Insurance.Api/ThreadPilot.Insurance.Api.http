@@ -1,0 +1,6 @@
+@ThreadPilot.Insurance.Api_HostAddress = http://localhost:5115
+
+GET {{ThreadPilot.Insurance.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

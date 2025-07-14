@@ -1,0 +1,6 @@
+@ThreadPilot.Vehicle.Api_HostAddress = http://localhost:5030
+
+GET {{ThreadPilot.Vehicle.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
