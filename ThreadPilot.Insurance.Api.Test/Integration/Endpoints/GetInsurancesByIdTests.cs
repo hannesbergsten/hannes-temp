@@ -1,17 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using ThreadPilot.Insurance.Api.ApiClients;
 using ThreadPilot.Insurance.Api.Models;
-using ThreadPilot.Insurance.Api.Test.Integration.Helpers;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Net.Http;
-using ThreadPilot.Insurance.Api.Repository;
-using ThreadPilot.Insurance.Api.Services;
-using Xunit;
 
 namespace ThreadPilot.Insurance.Api.Test.Integration.Endpoints
 {

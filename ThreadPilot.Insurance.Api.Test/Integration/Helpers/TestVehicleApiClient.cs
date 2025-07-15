@@ -5,7 +5,7 @@ namespace ThreadPilot.Insurance.Api.Test.Integration.Helpers;
 
 public class TestVehicleApiClient : IVehicleApiClient
 {
-    public Task<List<Vehicle>> GetVehiclesByRegistrationNumber(List<string> registrationIds, CancellationToken ct)
+    public Task<IReadOnlyList<Vehicle>> GetVehiclesByRegistrationNumber(IReadOnlyList<string> registrationIds, CancellationToken ct)
     {
         var vehicles = new List<Vehicle>
         {
@@ -13,6 +13,8 @@ public class TestVehicleApiClient : IVehicleApiClient
             new() { RegistrationNumber = "REGNR2", Manufacturer = "BMW", Year = 2018 },
             new() { RegistrationNumber = "REGNR3", Manufacturer = "Opel", Year = 2022 }
         };
-        return Task.FromResult(vehicles.Where(v => registrationIds.Contains(v.RegistrationNumber)).ToList());
+
+        var result = vehicles.Where(v => registrationIds.Contains(v.RegistrationNumber));
+        return Task.FromResult<IReadOnlyList<Vehicle>>(result.ToList());
     }
 }

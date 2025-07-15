@@ -1,10 +1,11 @@
-﻿using ThreadPilot.Insurance.Api.Models;
+﻿using System.Collections.Immutable;
+using ThreadPilot.Insurance.Api.Models;
 
 namespace ThreadPilot.Insurance.Api.Extensions;
 
 public static class InsuranceConverter
 {
-    public static InsuranceResponse ToResponse(this InsuranceBase[] insurances)
+    public static InsuranceResponse ToResponse(this ImmutableArray<InsuranceBase> insurances)
     {
         return new InsuranceResponse
         {

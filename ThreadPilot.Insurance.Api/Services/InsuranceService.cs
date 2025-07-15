@@ -1,7 +1,9 @@
-﻿using ThreadPilot.Insurance.Api.ApiClients;
+﻿using System.Collections.Immutable;
+using ThreadPilot.Insurance.Api.ApiClients;
 using ThreadPilot.Insurance.Api.Extensions;
 using ThreadPilot.Insurance.Api.Models;
 using ThreadPilot.Insurance.Api.Repository;
+using ThreadPilot.Shared.Models;
 
 namespace ThreadPilot.Insurance.Api.Services;
 
@@ -26,40 +28,42 @@ public class InsuranceService(IReadInsuranceRepository insuranceRepository, IVeh
         return insurances.ToResponse();
     }
 
-    private async Task<InsuranceBase[]> EnrichInsuranceTypes(List<InsuranceBase> insurances, CancellationToken ct)
+    private async Task<ImmutableArray<InsuranceBase>> EnrichInsuranceTypes(IReadOnlyList<InsuranceBase> insurances, CancellationToken ct)
     {
         var vehicleInsurances = GetVehicleInsurances(insurances);
-        if (vehicleInsurances.Count == 0) return insurances.ToArray();
+        if (vehicleInsurances.Count == 0) return [..insurances];
 
         var registrationNumbers = GetRegistrationNumbers(vehicleInsurances);
-        if (registrationNumbers.Count == 0) return insurances.ToArray();
+        if (registrationNumbers.Count == 0) return [..insurances];
         
         var vehicleResponse = await vehicleApiClient.GetVehiclesByRegistrationNumber(registrationNumbers, ct)
             .ConfigureAwait(false);
-
-        foreach (var insurance in vehicleInsurances)
-        {
-            var vehicle = vehicleResponse.FirstOrDefault(v =>
-                v.RegistrationNumber == insurance.Vehicle!.RegistrationNumber);
-
-            if (vehicle != null)
+      
+        return [
+            ..insurances.Select(insurance => insurance switch
             {
-                var index = insurances.IndexOf(insurance);
-                insurances[index] = insurance with { Vehicle = vehicle };
-            }
-        }
-
-        return insurances.ToArray();
+                VehicleInsurance { Vehicle.RegistrationNumber: not null } vehicleInsurance =>
+                    UpdateVehicleInsurance(vehicleInsurance, vehicleResponse),
+                _ => insurance
+            })
+        ];
     }
 
-    private static List<string> GetRegistrationNumbers(List<VehicleInsurance> vehicleInsurances)
+    private static InsuranceBase UpdateVehicleInsurance(VehicleInsurance insurance, IReadOnlyList<Vehicle> vehicles)
+    {
+        var vehicle = vehicles.FirstOrDefault(v => 
+            v.RegistrationNumber == insurance.Vehicle!.RegistrationNumber);
+        return vehicle != null ? insurance with { Vehicle = vehicle } : insurance;
+    }
+
+    private static IReadOnlyList<string> GetRegistrationNumbers(IReadOnlyList<VehicleInsurance> vehicleInsurances)
     {
         return vehicleInsurances
             .Select(v => v.Vehicle!.RegistrationNumber!)
             .ToList();
     }
 
-    private static List<VehicleInsurance> GetVehicleInsurances(List<InsuranceBase> insurances)
+    private static IReadOnlyList<VehicleInsurance> GetVehicleInsurances(IReadOnlyList<InsuranceBase> insurances)
     {
         return insurances.OfType<VehicleInsurance>()
             .Where(v => v.Vehicle?.RegistrationNumber != null)

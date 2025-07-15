@@ -74,3 +74,4 @@ With more time, I would probably think of these things:
 * Comprehensive code documentation
 * Adding logging and monitoring
 * refine the Swagger documentation.
+* Add more test projects and tests

@@ -5,12 +5,12 @@ namespace ThreadPilot.Insurance.Api.Repository;
 
 public interface IReadInsuranceRepository
 {
-    Task<List<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct);
+    Task<IReadOnlyList<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct);
 }
 
 public class ReadInsuranceRepository : IReadInsuranceRepository
 {
-    public async Task<List<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct)
+    public async Task<IReadOnlyList<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct)
     {
         var insurances = new List<InsuranceBase>
         {

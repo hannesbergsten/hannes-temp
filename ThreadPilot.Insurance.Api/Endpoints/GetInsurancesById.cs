@@ -5,7 +5,7 @@ using ThreadPilot.Insurance.Api.Services;
 
 namespace ThreadPilot.Insurance.Api.Endpoints;
 
-public class GetInsurancesById(IInsuranceService insuranceService, IVehicleApiClient vehicleApiClient)
+public class GetInsurancesById(IInsuranceService insuranceService)
     : Endpoint<GetInsurancesByIdRequest, InsuranceResponse>
 {
     public override void Configure()

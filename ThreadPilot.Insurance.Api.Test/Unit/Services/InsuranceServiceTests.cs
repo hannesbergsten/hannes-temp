@@ -5,6 +5,8 @@ using ThreadPilot.Insurance.Api.Repository;
 using ThreadPilot.Insurance.Api.Services;
 using ThreadPilot.Shared.Models;
 
+namespace ThreadPilot.Insurance.Api.Test.Unit.Services;
+
 public class InsuranceServiceTests
 {
     private readonly Mock<IReadInsuranceRepository> _insuranceRepoMock = new();
