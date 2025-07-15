@@ -16,7 +16,8 @@ This solution implements an integration layer between the new core system (Threa
 
 ## Running Locally
 1. **Prerequisites**: .NET 8 SDK
-2. **Start Vehicle API**:
+2. **HTTP Configuration**: Choose the appropriate HTTP configuration profiles for each API in your IDE before starting.
+3. **Start Vehicle API**:
    ```bash
    dotnet run --project ThreadPilot.Vehicle.Api
    ```
