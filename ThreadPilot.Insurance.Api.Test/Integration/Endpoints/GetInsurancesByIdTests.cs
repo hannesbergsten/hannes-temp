@@ -9,27 +9,21 @@ using ThreadPilot.Insurance.Api.Test.Integration.Helpers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Net.Http;
+using ThreadPilot.Insurance.Api.Repository;
+using ThreadPilot.Insurance.Api.Services;
 using Xunit;
 
 namespace ThreadPilot.Insurance.Api.Test.Integration.Endpoints
 {
-    public class GetInsurancesByIdTests : IClassFixture<WebApplicationFactory<Program>>
+    public class GetInsurancesByIdTests : TestBase
     {
         private const string ValidId = "1";
         private const string InValidId = "999";
         private readonly HttpClient _httpClient;
         
-        public GetInsurancesByIdTests(WebApplicationFactory<Program> factory)
+        public GetInsurancesByIdTests()
         {
-            var customFactory = factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddScoped<IVehicleApiClient, TestVehicleApiClient>();
-                });
-            });
-
-            _httpClient = customFactory.CreateClient();
+           _httpClient = CreateClientFromFactory();
         }
         
         [Fact]

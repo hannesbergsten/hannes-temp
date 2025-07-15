@@ -2,34 +2,28 @@
 
 namespace ThreadPilot.Vehicle.Api.Endpoints;
 
-public class GetByRegistrationId(IVehicleRepository vehicleRepository) : EndpointWithoutRequest<Shared.Models.Vehicle>
+public class GetByRegistrationId(IVehicleRepository vehicleRepository) : EndpointWithoutRequest<List<Shared.Models.Vehicle>>
 {
     public override void Configure()
     {
-        Get("/vehicle/{registrationId}");
+        Get("/vehicles/{registrationIds}");
         Description(x => x.WithName("GetByRegistrationId"));
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var registrationId = Route<string>("registrationId");
-        if (registrationId is null)
+        var registrationIds = Route<List<string>>("registrationIds");
+        if (registrationIds is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
         
-        var vehicle = await vehicleRepository
-            .GetVehicleByRegistrationNumber(registrationId, ct)
+        var vehicles = await vehicleRepository
+            .GetVehiclesByRegistrationNumber(registrationIds, ct)
             .ConfigureAwait(false);
 
-        if (vehicle is null)
-        {
-            await SendNotFoundAsync(ct);
-            return;
-        }
-
-        await SendOkAsync(vehicle, ct);
+        await SendOkAsync(vehicles, ct);
     }
 }

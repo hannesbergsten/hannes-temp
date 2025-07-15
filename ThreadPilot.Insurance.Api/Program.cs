@@ -3,10 +3,15 @@ using FastEndpoints.Swagger;
 using ThreadPilot.Insurance.Api.ApiClients;
 using ThreadPilot.Insurance.Api.Initialization;
 using ThreadPilot.Insurance.Api.Repository;
+using ThreadPilot.Insurance.Api.Services;
 
 var builder = WebApplication.CreateBuilder();
 
-builder.Services.AddSingleton<IVehicleApiClient, VehicleApiClient>();
+builder.Services
+    .AddScoped<IReadInsuranceRepository, ReadInsuranceRepository>()
+    .AddSingleton<IVehicleApiClient, VehicleApiClient>()
+    .AddScoped<IInsuranceService, InsuranceService>();
+
 builder.Services.AddHttpClient<IVehicleApiClient, VehicleApiClient>((provider, options) =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
@@ -19,7 +24,6 @@ builder.Services.AddHttpClient<IVehicleApiClient, VehicleApiClient>((provider, o
 
 builder.Services
     .AddFastEndpoints()
-    .AddScoped<IReadInsuranceRepository, ReadInsuranceRepository>()
     .AddAppSwagger();
 
 var app = builder.Build();

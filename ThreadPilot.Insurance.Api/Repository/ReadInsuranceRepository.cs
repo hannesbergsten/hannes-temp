@@ -5,12 +5,12 @@ namespace ThreadPilot.Insurance.Api.Repository;
 
 public interface IReadInsuranceRepository
 {
-    Task<InsuranceBase[]> GetInsurancesByPersonalId(string personalId, CancellationToken ct);
+    Task<List<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct);
 }
 
 public class ReadInsuranceRepository : IReadInsuranceRepository
 {
-    public async Task<InsuranceBase[]> GetInsurancesByPersonalId(string personalId, CancellationToken ct)
+    public async Task<List<InsuranceBase>> GetInsurancesByPersonalId(string personalId, CancellationToken ct)
     {
         var insurances = new List<InsuranceBase>
         {
@@ -39,6 +39,6 @@ public class ReadInsuranceRepository : IReadInsuranceRepository
                 Price = 10
             }
         };
-        return await Task.FromResult(insurances.Where(i => i.PersonalId == personalId).ToArray());
+        return await Task.FromResult(insurances.Where(i => i.PersonalId == personalId).ToList());
     }
 }
